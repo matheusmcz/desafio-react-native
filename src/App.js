@@ -23,7 +23,16 @@ export default function App() {
   }, []);
 
   async function handleLikeProject(id) {
-    const response = await api.post("projects", {});
+    const response = await api.post(`/projects/${id}/like`);
+
+    return setProject((like) =>
+      like.map((project) => {
+        if (project.id === id) {
+          return response.data;
+        }
+        return project;
+      })
+    );
   }
 
   return (
@@ -57,9 +66,9 @@ export default function App() {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleLikeProject(1)}
+                onPress={() => handleLikeProject(project.id)}
                 // Remember to replace "1" below with project ID: {`like-button-${project.id}`}
-                testID={`like-button-1`}
+                testID={`like-button-${project.id}`}
               >
                 <Text style={styles.buttonText}>Curtir</Text>
               </TouchableOpacity>
